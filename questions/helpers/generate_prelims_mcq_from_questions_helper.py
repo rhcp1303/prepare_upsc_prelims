@@ -1,5 +1,5 @@
-from langchain.vectorstores import FAISS
-from langchain.embeddings import HuggingFaceEmbeddings
+from langchain_community.vectorstores import FAISS
+from langchain_huggingface import HuggingFaceEmbeddings
 import os
 from langchain_google_genai import ChatGoogleGenerativeAI
 from ..helpers.prompt_helpers.mock_mcq_prompt_helper.single_statement_question_prompt_helper import \
