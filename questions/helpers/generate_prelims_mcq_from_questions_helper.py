@@ -53,6 +53,8 @@ def generate_mock_mcq(source_embeddings_path, target_embeddings_path, prefix):
         docs = source_vectorstore.get_by_ids([doc_id])
         source_content = docs[0]
         print(source_content)
+
+
         searched_content = target_vectorstore.similarity_search(str(source_content), k=10)
         target_content = ""
         for doc in searched_content:
