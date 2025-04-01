@@ -53,9 +53,6 @@ def generate_mock_mcq(source_embeddings_path, target_embeddings_path, prefix):
         source_embeddings_path,
         embeddings=embeddings,
         allow_dangerous_deserialization=True)
-    # target_vectorstore = FAISS.load_local(target_embeddings_path,
-    #                                       embeddings=embeddings,
-    #                                       allow_dangerous_deserialization=True)
     list_of_doc_ids = list(source_vectorstore.index_to_docstore_id.values())
     print("-" * 20)
     print(len(list_of_doc_ids))
@@ -66,11 +63,6 @@ def generate_mock_mcq(source_embeddings_path, target_embeddings_path, prefix):
         docs = source_vectorstore.get_by_ids([doc_id])
         source_content = docs[0]
         print(source_content)
-
-        # searched_content = target_vectorstore.similarity_search(str(source_content), k=10)
-        # target_content = ""
-        # for doc in searched_content:
-        #     target_content += str(doc) + "\n"
         target_content = traverse_graph_to_get_content(source_content)
         for prompt, suffix, api_key in [(single_statement_question_prompt, "single_statement.txt", api_key_1),
                                         (two_statements_question_prompt, "two_statement.txt", api_key_2),

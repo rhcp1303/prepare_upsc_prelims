@@ -43,7 +43,9 @@ match_the_pairs_prompt = """
         mere collection of facts from other authentic sources but assume the content to be true. So don't create statements 
         like "according to the text, given in the text, mentioned in the text, etc." Also don't mention anything about the 
         source used for forming questions. Don't wrote anything like "according to the passage, the text mentions...,etc."
-
+    
+    ** None of the elements in a pair should appear more than once in the question
+    
     **  Each pair should be of strictly and only factual data to br matched and not descriptions or general statements
 
     **  No two pairs can have same data repeated
