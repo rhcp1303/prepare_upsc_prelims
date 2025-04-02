@@ -6,12 +6,10 @@ single_statement_question_prompt = """
 
 **Instructions:**
 
-    Pickup all multiple-choice questions (MCQs)  from the following source content:
-
-    Source Content: {source_content}
+    Source Question: {source_question}
     
-    and then create unique UPSC style multiple choice questions on exactly similar topics ({topic}), 
-    from the following target content:
+    Create unique UPSC style multiple choice questions on exactly same topic as of the above question, 
+    using the following target content:
     
     Target Content: {target_content}
     

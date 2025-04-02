@@ -4,16 +4,14 @@ three_statements_question_prompt = """
 
 **Instructions:**
 
-    Pickup all multiple-choice questions (MCQs)  from the following source content:
-
-    Source Content: {source_content}
+    Source Question: {source_question}
     
-    and then create unique UPSC style multiple choice questions on exactly similar topics ({topic}), 
-    from the following target content:
+    Create unique UPSC style multiple choice questions on exactly same topic as of the above question, 
+    using the following target content:
     
     Target Content: {target_content}
     
-    with 4 options (only 1 correct) each asking all the data and facts and named entities present in the target content   
+    with 4 options (only 1 correct) each asking all the data and facts and named entities present in the source question   
     but without revealing that the question is being framed from this text , such that the generated questions cover the 
     topic comprehensively and do not reproduce similar questions while adhering to the following criteria:
 
@@ -190,7 +188,7 @@ Central Asian and West Asian origin.
 
 * Do not mention any source indicators for question generated but give the passage or source in the question itself
 * Do not only create questions on the topic but also create questions whose answer would be the given topic
-* Avoid mentioning any information related to the prompt,query, source_content, target_content,  input text, input document, 
+* Avoid mentioning any information related to the prompt,query, source_question, target_content,  input text, input document, 
   LLM, LangChain, or vector embeddings used in the generation process.
 * Present the output in a clear, organized, and user-friendly format.
 * Do not tell me to continue with similar examples. Give all the output consuming 8192 tokens.

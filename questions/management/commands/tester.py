@@ -1,6 +1,6 @@
 from django.core.management.base import BaseCommand
 import logging
-from ...helpers import get_named_entities_from_text_helper as helper
+from ...helpers import generate_prelims_mcq_from_questions_helper as helper
 
 logger = logging.getLogger(__name__)
 
@@ -9,19 +9,17 @@ class Command(BaseCommand):
     help = 'This is a utility management command for testing purpose'
 
     def handle(self, *args, **options):
-        text = '''
-        1. Consider the following statements regarding the Association of Southeast Asian Nations (ASEAN):
-1. It is a regional grouping of twelve
-members incuding India.
-2. ASEAN Defence Ministers’ Meeting -
-Plus (ADMM-Plus) is the highest defence consultative and cooperative mechanism in ASEAN.
-Which of the statements given above is/are correct?
-(a) 1 only
-(b) 2 only
-(c) Both 1 and 2 (d) Neither 1 nor 2
+        source_question = '''
+        Which one of the following statements about Sangam literature in ancient South India is correct?
 
-        
+a) Sangam poems are devoid of any reference to material culture.
+
+b) The social classification of Varna was known to Sangam poets.
+
+c) Sangam poems have no reference to warrior ethic.
+
+d) Sangam literature refers to magical forces as irrational.
         '''
-        ne = helper.get_ner_labels_from_llm(text)
-        print(ne)
+        target_embeddings_path = "questions/data/faiss_folder/consolidated_target_index/complete_history_art_and_culture.faiss"
+        helper.generate_mock_mcq(source_question, target_embeddings_path, "temp")
         print("here")
