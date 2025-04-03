@@ -24,8 +24,8 @@ api_key_4 = "AIzaSyD0nx9rH7HhQZDpJrY0hOaOR9Xok4r-liM"
 api_key_5 = "AIzaSyBq2_GdMf0KhowSVSb0hn4Z_8B81kBewXY"
 
 
-def traverse_graph_to_get_content(source_question):
-    named_entities = neh.get_ner_labels_from_llm(source_question)
+def traverse_graph_to_get_content(source_content):
+    named_entities = neh.get_ner_labels_from_llm(source_content)
     p = []
     for entity in named_entities:
         print(entity)
@@ -36,37 +36,53 @@ def traverse_graph_to_get_content(source_question):
     return p
 
 
-def worker(prompt, prefix, suffix, api_key, source_question, target_content):
-    query = prompt.format(source_question=source_question,
+def worker(prompt, prefix, suffix, api_key, source_content, target_content):
+    query = prompt.format(source_question=source_content,
                           target_content=target_content)
     os.environ["GOOGLE_API_KEY"] = api_key
     llm = ChatGoogleGenerativeAI(model="gemini-1.5-flash")
     response = llm.invoke(query).content
-    with open("temp/" + prefix + "_ " + suffix, "w") as output_file:
+    with open("temp/" + prefix + "_ " + suffix, "a+") as output_file:
         output_file.write(response + "\n\n")
 
 
-def generate_mock_mcq(source_question, target_embeddings_path, prefix):
+def generate_mock_mcq(source_embeddings_path, target_embeddings_path, prefix):
     embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/multi-qa-MiniLM-L6-cos-v1")
-    target_vectorstore = FAISS.load_local(target_embeddings_path,
-                                          embeddings=embeddings,
-                                          allow_dangerous_deserialization=True)
-    print(source_question)
-    searched_content = target_vectorstore.similarity_search(source_question, k=10)
-    target_content = traverse_graph_to_get_content(source_question)
-    print(target_content)
-    for doc in searched_content:
-        target_content += "\n" + str(doc)
-    for prompt, suffix, api_key in [(single_statement_question_prompt, "single_statement.txt", api_key_1),
-                                    (two_statements_question_prompt, "two_statement.txt", api_key_2),
-                                    (three_statements_question_prompt, "three_statement.txt", api_key_3),
-                                    (identify_features_question_prompt, "identify_features.txt", api_key_4),
-                                    (match_the_pairs_prompt, "match_the_pairs.txt", api_key_5)
-                                    ]:
-        processes = []
-        p = multiprocessing.Process(target=worker,
-                                    args=(prompt, prefix, suffix, api_key, source_question, target_content))
-        processes.append(p)
-        p.start()
-    for p in processes:
-        p.join()
+    source_vectorstore = FAISS.load_local(
+        source_embeddings_path,
+        embeddings=embeddings,
+        allow_dangerous_deserialization=True)
+    target_vectorstore = FAISS.load_local(
+        target_embeddings_path,
+        embeddings=embeddings,
+        allow_dangerous_deserialization=True)
+    list_of_doc_ids = list(source_vectorstore.index_to_docstore_id.values())
+    print("-" * 20)
+    print(len(list_of_doc_ids))
+    print("-" * 20)
+    document_num = 1
+    for doc_id in list_of_doc_ids:
+        print(f"processing document number: {document_num}")
+        docs = source_vectorstore.get_by_ids([doc_id])
+        source_content = docs[0]
+        print(source_content)
+        target_content = str(traverse_graph_to_get_content(source_content))
+
+        searched_content = target_vectorstore.similarity_search(source_content.page_content)
+        for doc in searched_content:
+            target_content += "\n" + doc.page_content
+        for prompt, suffix, api_key in [(single_statement_question_prompt, "single_statement.txt", api_key_1),
+                                        (two_statements_question_prompt, "two_statement.txt", api_key_2),
+                                        (three_statements_question_prompt, "three_statement.txt", api_key_3),
+                                        (identify_features_question_prompt, "identify_features.txt", api_key_4),
+                                        (match_the_pairs_prompt, "match_the_pairs.txt", api_key_5)
+                                        ]:
+            processes = []
+            p = multiprocessing.Process(target=worker,
+                                        args=(prompt, prefix, suffix, api_key, source_content, target_content))
+
+            processes.append(p)
+            p.start()
+            for p in processes:
+                p.join()
+            document_num += 1

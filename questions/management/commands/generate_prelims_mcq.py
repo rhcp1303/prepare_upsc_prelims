@@ -21,4 +21,4 @@ class Command(BaseCommand):
         target_embeddings_path = options['target_embeddings_path']
         prefix = options['prefix']
         logger.info(f"Starting generation of of questions:")
-        helper.generate_mock_mcq(source_embeddings_path, target_embeddings_path, prefix)
+        helper.generate_mock_mcq(source_embeddings_path,target_embeddings_path,prefix)
