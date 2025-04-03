@@ -29,7 +29,7 @@ def traverse_graph_to_get_content(source_content):
 
 
 def worker(prompt, api_key, source_content, question):
-    query = prompt.format(source_question=source_content,
+    query = prompt.format(question=question,
                           target_content=target_content)
     os.environ["GOOGLE_API_KEY"] = api_key
     llm = ChatGoogleGenerativeAI(model="gemini-1.5-flash")
