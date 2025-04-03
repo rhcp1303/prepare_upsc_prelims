@@ -64,11 +64,11 @@ def generate_mock_mcq(source_embeddings_path, target_embeddings_path, prefix):
     for doc_id in list_of_doc_ids:
         print(f"processing document number: {document_num}")
         docs = source_vectorstore.get_by_ids([doc_id])
-        source_content = docs[0]
+        source_content = docs[0].page_content
         print(source_content)
         target_content = str(traverse_graph_to_get_content(source_content))
 
-        searched_content = target_vectorstore.similarity_search(source_content.page_content)
+        searched_content = target_vectorstore.similarity_search(source_content)
         for doc in searched_content:
             target_content += "\n" + doc.page_content
         for prompt, suffix, api_key in [(single_statement_question_prompt, "single_statement.txt", api_key_1),
