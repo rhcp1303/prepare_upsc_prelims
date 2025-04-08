@@ -9,9 +9,11 @@ Question: {question}
 
 Source_Content: {source_content}
 
-Give correct answer for the above question and a provide a detailed explanation for the correct answer using the source_content 
-given. Analyze the correct option and explain why it is the most appropriate.Discuss why the other options are incorrect.
-Incorporate key UPSC-relevant points and perspectives in the explanation.
+Correct Answer: correct option out of the give 4 options
+
+Explanation: 
+
+Explanation for the answer
 
 
 **Example Prompt:**

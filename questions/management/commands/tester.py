@@ -1,6 +1,6 @@
 from django.core.management.base import BaseCommand
 import logging
-from ...helpers import generate_prelims_mcq_from_questions_helper as helper
+from ...helpers import generate_explanaton_helper as helper
 
 logger = logging.getLogger(__name__)
 
@@ -10,16 +10,22 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         source_question = '''
-        Which one of the following statements about Sangam literature in ancient South India is correct?
 
-a) Sangam poems are devoid of any reference to material culture.
+**1. Consider the following statements regarding Nagarjuna:**
 
-b) The social classification of Varna was known to Sangam poets.
+1. He is primarily associated with the Mahayana school of Buddhism.
+2. His birthplace is traditionally identified with Gujarat.
+3. He made significant contributions to the field of alchemy.
+4.  The archaeological site of Nagarjunakonda is named after him.
 
-c) Sangam poems have no reference to warrior ethic.
+How many of the above statements are factually accurate?
 
-d) Sangam literature refers to magical forces as irrational.
+(a) Only one
+(b) Only two
+(c) Only three
+(d) All four
         '''
-        target_embeddings_path = "questions/data/faiss_folder/consolidated_target_index/complete_history_art_and_culture.faiss"
-        helper.generate_mock_mcq(source_question, target_embeddings_path, "temp")
+
+        source_embeddings_path = "questions/data/faiss_folder/consolidated_target_index/complete_history_art_and_culture.faiss"
+        helper.generate_explanation(source_question, source_embeddings_path)
         print("here")

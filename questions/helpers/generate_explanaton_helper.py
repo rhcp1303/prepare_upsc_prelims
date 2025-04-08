@@ -22,15 +22,14 @@ def traverse_graph_to_get_content(source_content):
     for entity in named_entities:
         print(entity)
         target_entity_text = entity['entity']
-        all_paths = qkh.get_paths_from_entity_any_label(target_entity_text, max_depth=3)
+        all_paths = qkh.get_paths_from_entity_any_label(target_entity_text, max_depth=2)
         for path in all_paths:
             p.append(path)
     return p
 
 
 def worker(prompt, api_key, source_content, question):
-    query = prompt.format(question=question,
-                          target_content=target_content)
+    query = prompt.format(question=question, source_content=source_content)
     os.environ["GOOGLE_API_KEY"] = api_key
     llm = ChatGoogleGenerativeAI(model="gemini-1.5-flash")
     response = llm.invoke(query).content
@@ -38,7 +37,7 @@ def worker(prompt, api_key, source_content, question):
         output_file.write(response + "\n\n")
 
 
-def generate_mock_mcq(question, source_embeddings_path):
+def generate_explanation(question, source_embeddings_path):
     embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/multi-qa-MiniLM-L6-cos-v1")
     source_vectorstore = FAISS.load_local(
         source_embeddings_path,
