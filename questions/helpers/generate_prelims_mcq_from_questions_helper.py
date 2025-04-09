@@ -42,7 +42,7 @@ def worker(prompt, prefix, suffix, api_key, source_content, target_content):
     os.environ["GOOGLE_API_KEY"] = api_key
     llm = ChatGoogleGenerativeAI(model="gemini-1.5-flash")
     response = llm.invoke(query).content
-    with open("temp/" + prefix + "_ " + suffix, "a+") as output_file:
+    with open("temp/" + prefix + "_" + suffix, "a+") as output_file:
         output_file.write(response + "\n\n")
 
 
@@ -85,4 +85,4 @@ def generate_mock_mcq(source_embeddings_path, target_embeddings_path, prefix):
             p.start()
             for p in processes:
                 p.join()
-            document_num += 1
+        document_num += 1
