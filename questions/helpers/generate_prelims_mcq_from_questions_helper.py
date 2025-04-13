@@ -29,11 +29,16 @@ def traverse_graph_to_get_content(source_content):
     p = []
     for entity in named_entities:
         print(entity)
-        target_entity_text = entity['entity']
-        all_paths = qkh.get_paths_from_entity_any_label(target_entity_text, max_depth=1)
-        for path in all_paths:
-            p.append(path)
+        try:
+            target_entity_text = entity['entity']
+            all_paths = qkh.get_paths_from_entity_any_label(target_entity_text, max_depth=1)
+            for path in all_paths:
+                p.append(path)
+        except Exception as e:
+            pass
     return p
+
+
 
 
 def worker(prompt, prefix, suffix, api_key, source_content, target_content):
